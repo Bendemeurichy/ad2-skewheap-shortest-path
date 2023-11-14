@@ -1,7 +1,10 @@
 package oplossing;
 
-import static org.junit.jupiter.api.Assertions.*;
+import opgave.PriorityQueue;
 
-class MyPriorityQueueTest {
-
+public class MyPriorityQueueTest extends AbstractPriorityQueueTest {
+    @Override
+    public PriorityQueue<Integer, String> createPriorityQueue() {
+        return new MyPriorityQueue<>();
+    }
 }
