@@ -14,6 +14,7 @@ public class ShortestPathTest {
     @Test
     public void testShortestPathSimple() {
         MyShortestPath shortestPath = new MyShortestPath();
+        shortestPath.setPriorityQueueFactory(priorityQueueFactory);
         List<Node> nodes = new ArrayList<>();
         List<DirectedEdge> edges = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
