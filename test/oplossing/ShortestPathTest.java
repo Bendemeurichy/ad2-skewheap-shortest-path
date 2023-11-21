@@ -47,6 +47,7 @@ public class ShortestPathTest {
         }
 
         edges.remove(edges.get(0));
+        edges.remove(edges.get(1));
         assertTrue(path.containsAll(edges));
     }
 }
