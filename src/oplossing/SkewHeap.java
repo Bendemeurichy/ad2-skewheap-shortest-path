@@ -6,6 +6,7 @@ import opgave.QueueItem;
 public class SkewHeap<P extends Comparable<P>, V> implements PriorityQueue<P,V> {
     private SkewElement<P,V> root;
     int size;
+    int compareCount;
 
     @Override
     public QueueItem<P,V> add(Comparable priority, Object value) {
@@ -70,6 +71,7 @@ public class SkewHeap<P extends Comparable<P>, V> implements PriorityQueue<P,V> 
             largeHeap = heap1;
         }
 
+        compareCount++;
         smallHeap.swapChildren();
         if(smallHeap.getLeftChild()==null){
             smallHeap.setLeftChild(largeHeap);
@@ -88,5 +90,9 @@ public class SkewHeap<P extends Comparable<P>, V> implements PriorityQueue<P,V> 
 
     public SkewElement<P,V> getRoot(){
         return root;
+    }
+
+    public int getCompareCount(){
+        return compareCount;
     }
 }

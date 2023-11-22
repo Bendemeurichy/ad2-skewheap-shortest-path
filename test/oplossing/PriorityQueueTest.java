@@ -102,4 +102,5 @@ public class PriorityQueueTest {
         assertEquals(size/2, queue.size());
 
     }
+
 }

@@ -54,6 +54,7 @@ public class SkewElement<P extends Comparable<P>,V> implements QueueItem<P, V> {
             while(current.equals(queue.getRoot())){
                 if(current.getParent().getRightChild()!=null && current.equals(current.getParent().getLeftChild())){
                     current.getParent().swapChildren();
+                    queue.compareCount++;
                 }
                 current=current.getParent();
             }

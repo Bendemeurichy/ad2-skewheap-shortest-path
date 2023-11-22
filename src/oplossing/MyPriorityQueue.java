@@ -6,7 +6,7 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
     //leftist heap
     private HeapElement<P,V> root;
     int size =0;
-
+    int compareCount=0;
     @Override
     public QueueItem<P, V> add(P priority, V value) {
         HeapElement<P,V> newElement = new HeapElement<>(priority,value,0);
@@ -62,6 +62,8 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
             largeHeap=heap1;
         }
 
+        compareCount++;
+
 
         smallHeap.setRightChild(merge(smallHeap.getRightChild(),largeHeap));
         smallHeap.getRightChild().setParent(smallHeap);
@@ -72,6 +74,8 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
         if(smallHeap.getLeftChild()==null || (nplLeft<nplRight)){
             smallHeap.swapChildren();
         }
+
+        compareCount++;
 
         return smallHeap;
     }
@@ -101,8 +105,13 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
         if(current.equals(current.getParent().getLeftChild()) && (current.getParent().getRightChild()==null || current.getNpl()>=current.getParent().getRightChild().getNpl())){
             return;
         }
-
+        compareCount++;
         repairLeftistProperty(current.getParent());
 
+
+    }
+
+    public int getCompareCount(){
+        return compareCount;
     }
 }
