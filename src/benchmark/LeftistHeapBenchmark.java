@@ -1,5 +1,6 @@
 package benchmark;
 import opgave.PriorityQueue;
+import opgave.QueueItem;
 import oplossing.MyPriorityQueue;
 import oplossing.MyPriorityQueueFactory;
 
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class LeftistHeapBenchmark {
         public static void main(String[] args) throws IOException {
-            long size = 10_000_000;
+            long size = 10_000;
             //create writers
             BufferedWriter addLeftistHeapTime = new BufferedWriter(new FileWriter("benchmark/LeftistHeapAddBenchTime.csv"));
             BufferedWriter addLeftistHeapComp = new BufferedWriter(new FileWriter("benchmark/LeftistHeapAddBenchComp.csv"));
@@ -61,9 +62,10 @@ public class LeftistHeapBenchmark {
             Random rnd = new Random();
             for(long i=1;i<size;i+=size/1000) {
                 PriorityQueue<Integer, Double> skewHeap = (new MyPriorityQueueFactory()).create();
+                QueueItem<Integer,Double>[] items = new QueueItem[(int)i];
 
                 for (int j = 0; j < i; j++) {
-                    skewHeap.add(1000+rnd.nextInt(1000), i * 1.0);
+                    //items[]=skewHeap.add(1000+rnd.nextInt(1000), i * 1.0);
                 }
 
                 long start = System.currentTimeMillis();
