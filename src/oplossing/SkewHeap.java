@@ -52,8 +52,8 @@ public class SkewHeap<P extends Comparable<P>, V> implements PriorityQueue<P,V> 
         return root == null;
     }
 
+    // normal recursive top down merge (theory)
     public SkewElement<P,V> merge(SkewElement<P,V> heap1, SkewElement<P,V> heap2){
-        //TODO: kijk cursus
         if (heap1 == null) {
             return heap2;
         }

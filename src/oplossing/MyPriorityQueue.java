@@ -45,6 +45,7 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
         return size==0;
     }
 
+    //merge 2 leftist heaps recursively (found online: https://www.classes.cs.uchicago.edu/archive/2016/winter/22300-1/lectures/LeftistHeaps/index.html)
     public HeapElement<P,V> merge(HeapElement<P,V> heap1, HeapElement<P,V> heap2){
         if (heap1 == null) {
             return heap2;
@@ -64,10 +65,10 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
 
         compareCount++;
 
-
         smallHeap.setRightChild(merge(smallHeap.getRightChild(),largeHeap));
         smallHeap.getRightChild().setParent(smallHeap);
 
+        // fix npls
         int nplLeft = smallHeap.getLeftChild() != null ? smallHeap.getLeftChild().getNpl() : 0;
         int nplRight = smallHeap.getRightChild() != null ? smallHeap.getRightChild().getNpl() : 0;
         smallHeap.setNpl(Math.min(nplLeft, nplRight) + 1);
@@ -87,6 +88,8 @@ public class MyPriorityQueue<P extends Comparable<P>, V> implements PriorityQueu
     public HeapElement<P,V> getRoot() {
         return root;
     }
+
+    //repair leftist property recursively, can stop when parent is a leftist heap (npl of left child is >= npl of right child)
 
     public void repairLeftistProperty(HeapElement<P, V> current) {
         if(current.getLeftChild()==null || (current.getRightChild()!=null && current.getLeftChild().getNpl()<current.getRightChild().getNpl())){

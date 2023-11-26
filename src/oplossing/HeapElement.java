@@ -25,6 +25,7 @@ public class HeapElement<P extends Comparable<P>,V> implements QueueItem<P,V> {
         return value;
     }
 
+    //implementation pretty standard: remove from queue, fix leftist property, merge with root
     @Override
     public void decreaseKey(P newPriority) {
         //haskell implementation found: https://www.classes.cs.uchicago.edu/archive/2016/winter/22300-1/lectures/LeftistHeaps/index.html

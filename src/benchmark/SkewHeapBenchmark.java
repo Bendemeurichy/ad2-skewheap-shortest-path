@@ -1,6 +1,7 @@
 package benchmark;
 
 import opgave.PriorityQueue;
+import opgave.QueueItem;
 import oplossing.SkewHeap;
 import oplossing.SkewHeapFactory;
 
@@ -12,20 +13,24 @@ import java.util.Random;
 public class SkewHeapBenchmark {
 
     public static void main(String[] args) throws IOException {
-        long size = 10_000_000;
+        int size = 10_000_000;
+        int steps= 50;
         //create writers
         BufferedWriter addSkewHeapTime = new BufferedWriter(new FileWriter("benchmark/SkewHeapAddBenchTime.csv"));
         BufferedWriter addSkewHeapComp = new BufferedWriter(new FileWriter("benchmark/SkewHeapAddBenchComp.csv"));
-        BufferedWriter popAndDecreaseKeySkewHeapTime = new BufferedWriter(new FileWriter("benchmark/SkewDecreaseKeyHeapBench.csv"));
-        BufferedWriter popAndDecreaseKeySkewHeapComp = new BufferedWriter(new FileWriter("benchmark/SkewDecreaseKeyHeapBenchComp.csv"));
+        BufferedWriter popAndDecreaseKeySkewHeapTime = new BufferedWriter(new FileWriter("benchmark/SkewHeapDecreaseKeyBenchTime.csv"));
+        BufferedWriter popAndDecreaseKeySkewHeapComp = new BufferedWriter(new FileWriter("benchmark/SkewHeapDecreaseKeyBenchComp.csv"));
         BufferedWriter popSkewHeapTime = new BufferedWriter(new FileWriter("benchmark/SkewHeapPopBenchTime.csv"));
         BufferedWriter popSkewHeapComp = new BufferedWriter(new FileWriter("benchmark/SkewHeapPopBenchComp.csv"));
         SkewHeapBenchmark benchmark = new SkewHeapBenchmark();
 
         //run benchmarks
-        benchmark.addBench(addSkewHeapTime,addSkewHeapComp,size);
-        benchmark.popAndDecreaseKeyBench(popAndDecreaseKeySkewHeapTime,popAndDecreaseKeySkewHeapComp,size);
-        benchmark.popBench(popSkewHeapTime,popSkewHeapComp,size);
+        System.out.println("addbench started");
+        benchmark.addBench(addSkewHeapTime,addSkewHeapComp,size,steps);
+        System.out.println("popanddecreasebench started");
+        benchmark.popAndDecreaseKeyBench(popAndDecreaseKeySkewHeapTime,popAndDecreaseKeySkewHeapComp,size,steps);
+        System.out.println("popbench started");
+        benchmark.popBench(popSkewHeapTime,popSkewHeapComp,size,steps);
 
         //close writers
         popSkewHeapTime.close();
@@ -36,15 +41,15 @@ public class SkewHeapBenchmark {
         addSkewHeapComp.close();
     }
 
-    public void addBench(BufferedWriter timeWriter,BufferedWriter compWriter, long size) {
+    public void addBench(BufferedWriter timeWriter,BufferedWriter compWriter, int size,int steps) {
         Random rnd = new Random();
 
-        for(long i=1;i<size;i+=size/1000){
+        for(int i=1;i<=size;i+=size/steps){
             PriorityQueue<Integer, Double> skewHeap = (new SkewHeapFactory()).create();
 
             long start=System.currentTimeMillis();
             for (int j = 0; j < i; j++) {
-                skewHeap.add(rnd.nextInt(1000), i * 1.0);
+                skewHeap.add(j, i * 1.0);
             }
             long end=System.currentTimeMillis();
             System.out.println("Time: "+(end-start)+"ms");
@@ -58,22 +63,23 @@ public class SkewHeapBenchmark {
         }
     }
 
-    public void popAndDecreaseKeyBench(BufferedWriter timeWriter,BufferedWriter compWriter,long size){
+    public void popAndDecreaseKeyBench(BufferedWriter timeWriter,BufferedWriter compWriter,int size,int steps){
         //TODO
-        Random rnd = new Random();
-        for(long i=1;i<size;i+=size/1000) {
+        for(int i=1;i<=size;i+=size/steps) {
             PriorityQueue<Integer, Double> skewHeap = (new SkewHeapFactory()).create();
+            QueueItem<Integer,Double>[] items = new QueueItem[(int)i];
+
 
             for (int j = 0; j < i; j++) {
-                skewHeap.add(1000+rnd.nextInt(1000), i * 1.0);
+                items[j]=skewHeap.add(i+j, i * 1.0);
             }
 
             long start = System.currentTimeMillis();
             for(int j=0;j<i;j++){
-                if(i%3==0){
+                if(i%2==0){
                     skewHeap.poll();
                 }else {
-                    skewHeap.peek().decreaseKey(rnd.nextInt(1000));
+                    items[j].decreaseKey(i-j);
                 }
 
             }
@@ -88,14 +94,13 @@ public class SkewHeapBenchmark {
         }
     }
 
-    public void popBench(BufferedWriter timeWriter,BufferedWriter compWriter,long size){
+    public void popBench(BufferedWriter timeWriter,BufferedWriter compWriter,int size,int steps){
         //TODO
-        Random rnd = new Random();
-        for(long i=1;i<size;i+=size/1000) {
+        for(int i=1;i<=size;i+=size/steps) {
             PriorityQueue<Integer, Double> skewHeap = (new SkewHeapFactory()).create();
 
             for (int j = 0; j < i; j++) {
-                skewHeap.add(rnd.nextInt(1000), i * 1.0);
+                skewHeap.add(i+j, i * 1.0);
             }
 
             long start = System.currentTimeMillis();

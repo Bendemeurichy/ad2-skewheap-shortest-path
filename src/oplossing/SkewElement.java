@@ -34,6 +34,7 @@ public class SkewElement<P extends Comparable<P>,V> implements QueueItem<P, V> {
         return value;
     }
 
+    //decreaseKey, option 1 (theoretical questions)
     @Override
     public void decreaseKey(P newPriority) {
         if(queue==null){
@@ -44,6 +45,7 @@ public class SkewElement<P extends Comparable<P>,V> implements QueueItem<P, V> {
         }
         this.priority = newPriority;
 
+        //swap children if skew property is violated
         if(this.equals(queue.getRoot())){
             SkewElement<P,V> leftChild = this.getLeftChild();
             this.setLeftChild(null);
@@ -53,9 +55,19 @@ public class SkewElement<P extends Comparable<P>,V> implements QueueItem<P, V> {
 
             if(this.equals(this.getParent().getLeftChild())){
                 this.getParent().setLeftChild(null);
+                //this.getParent().swapChildren();
             } else {
                 this.getParent().setRightChild(null);
             }
+
+            SkewElement<P,V> current = this;
+            while((!current.equals(queue.getRoot()))&&current.equals(current.getParent().getLeftChild())){
+                if(current.getParent().getRightChild()!=null){
+                    current.getParent().swapChildren();
+                }
+                current=current.getParent();
+            }
+
             this.parent=null;
             queue.setRoot(queue.merge(this, queue.getRoot()));
         }
