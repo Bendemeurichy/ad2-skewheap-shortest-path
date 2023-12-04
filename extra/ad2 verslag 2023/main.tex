@@ -30,7 +30,7 @@
 {\bf{\Large invloed heaps op kortste pad algoritme}}
 \end{center}
 {\bf Ben De Meurichy}  \\
-\hspace{\fill} 3/12/2023 \\
+\hspace{\fill} 4/12/2023 \\
 \hrule
 %\bf genereert vette letters, \large \Large \huge \Huge \tiny \small ... verschillende lettergroottes, met \em, \it, \sl krijg je cursieve tekst
 %Je moet accolades gebruiken om aan te geven waarop je het commando precies wil laten inwerken.
@@ -38,9 +38,9 @@
 
 
 \section{ Theorievragen}
-Het tweede algoritme om de decreasekey bewerking uit te voeren zal een betere tijdcomplexiteit hebben omdat we hier enkel de 2 kinderen van $S_v$ met elkaar moeten mergen als deze er beiden zijn en 1 top moeten toevoegen tot S.\\
-In tegenstelling tot algoritme 1 waarbij we de hele subboom $S_v$ verwijderen, dan S te herstellen en dan heel $S_v$ te mergen met S. Dit zal over het algemeen meer werk kosten dan de 2 kleinere merge bewerkingen in algoritme 2.
-Algoritme twee garandeerd niet altijd dat de heap die hier uit komt een skew heap is, als we een blad verwijderen uit de heap dat een linkerkind van zijn ouder is, hebben we geen heap meer om op deze plaats terug te plaatsen en voldoet de achtergebleven heap niet meer aan de skew eigenschap. We zullen zien in de volgende bewijzen dat het moeilijker is om bij algoritme 2 een slechte top (een top met meer toppen in het rechterkind dan in het linkerkind) te creëren dan bij algoritme 1 wat er voor zorgt dat de heap bij algoritme 2 over het algemeen beter gebalanceerd is.
+Het tweede algoritme om de decreasekey bewerking uit te voeren zal een betere tijdcomplexiteit hebben omdat we hier enkel de twee kinderen van $S_v$ met elkaar moeten mergen als deze er beiden zijn en 1 top moeten toevoegen tot S.\\
+In tegenstelling tot algoritme 1 waarbij we de hele subboom $S_v$ verwijderen, dan S te herstellen en dan heel $S_v$ te mergen met S. Dit zal over het algemeen meer werk kosten dan de twee kleinere merge bewerkingen in algoritme twee.
+Algoritme twee garandeerd niet altijd dat de heap die hier uit komt een skew heap is, als we een blad verwijderen uit de heap dat een linkerkind van zijn ouder is, hebben we geen heap meer om op deze plaats terug te plaatsen en voldoet de achtergebleven heap niet meer aan de skew eigenschap. We zullen zien in de volgende bewijzen dat het moeilijker is om bij algoritme twee een slechte top (een top met meer toppen in het rechterkind dan in het linkerkind) te creëren dan bij algoritme 1 wat er voor zorgt dat de heap bij algoritme twee over het algemeen beter gebalanceerd is.
 
 \subsection{Algoritme 1}
 \begin{proof}
@@ -50,12 +50,12 @@ Als we de beschrijving van het algoritme opsplitsen in de volgende drie stappen 
     \item herstel de skew eigenschap op het pad van v naar de wortel van S
     \item merge $S_v$ met herstelde S
 \end{itemize}
-De kost die nog niet bewezen is hierbij is de kost van het herstellen van S en het verwijderen van $S_v$.\\
-Het verwijderen van de subboom zal zorgen voor slechte toppen in de S als v op het linkerpad van de top lag en voor goede toppen als deze op het rechterpad van de top lag.\\
+De kost die nog niet bewezen is hierbij, is de kost van het herstellen van S en het verwijderen van $S_v$.\\
+Het verwijderen van de subboom zal zorgen voor slechte toppen in S als v op het linkerpad van de top lag en voor goede toppen als deze op het rechterpad van de top lag.\\
 Dit wordt opgelost door het herstellen van de achtergebleven heap. Om deze reden berekenen we de kost van deze bewerkingen samen. Aangezien de echte kost van deze bewerking enkel het overlopen van het pad van v naar de wortel is voor het herstellen (de pointers verwijderen naar v uit de heap is verwaarloosbaar als kost), maar de potentiaal wel drastisch kan veranderen door $S_v$ te verwijderen is het makkelijker om deze samen te beschouwen zodat we beperkingen kunnen opleggen op de gewijzigde kost.\\
-De herstelbewerking wordt als volgt beschreven: "Als een top op het van v naar de wortel v in zijn linkerdeelboom heeft en een rechterkind heeft, dan worden de kinderen gewisseld".\\
-Dit kunnen we gebruiken in de redenering doordat het verwijderen van $S_v$.\\
-Door de verwijderbewerking kunnen sommige toppen waarvan v op het rechterpad lag goed worden en toppen met v in het linkerkind slecht worden. Na het herstellen worden de toppen die slecht werden terug goed dus dan hebben we als potentiaal $\Phi(D')-\Phi(D)<=0$. Als de tabel uit het bewijs van stelling 16 wordt uitgebreid met deze bevinding kunnen we dan de geamortiseerde kost van de decreasekey bewerking bewijzen door de kost van alle stappen op te tellen. De herstelbewerking moet in het slechtste geval $n-1$ toppen overlopen, dit is het geval wanneer de initiele heap S een heap is met alle toppen op het linkerpad.
+De herstelbewerking wordt als volgt beschreven: "Als een top op het pad van v naar de wortel v in zijn linkerdeelboom heeft en een rechterkind heeft, dan worden de kinderen gewisseld".\\
+Dit kunnen we gebruiken in de redenering bij het verwijderen van $S_v$.\\
+Door de verwijder bewerking kunnen sommige toppen waarvan v in het rechterkind zat goed worden en toppen met v in het linkerkind slecht worden. Na het herstellen worden de toppen die slecht werden terug goed dus dan hebben we als potentiaal $\Phi(D')-\Phi(D)\leq0$. Als de tabel uit het bewijs van stelling 16 wordt uitgebreid met deze bevinding kunnen we dan de geamortiseerde kost van de decreasekey bewerking bewijzen door de kost van alle stappen op te tellen. De herstelbewerking moet in het slechtste geval $n-1$ toppen overlopen, dit is het geval wanneer de initiele heap S een heap is met alle toppen op het linkerpad.
 
 \begin{table}[H]
 \begin{tabular}{lllll}
@@ -98,10 +98,10 @@ Dit geeft een geamortiseerde bovengrens van $O(n\log(n)$ voor n bewerkingen dus 
 \newpage
 \section{Heaps implementatie}
 \subsection{Skew heap}
-Om te voldoen aan de opgave voor de skew heap heb ik een vrij standaard skew heap geïmplementeerd.
+Om te voldoen aan de opgave voor de skew heap is er een vrij standaard skew heap geïmplementeerd.
 De details die open zijn voor interpretatie zoals de merge- en decreasekey-bewerkingen zal ik wel toelichten.
 \\\\
-Voor het mergen van twee skew heaps heb ik gekozen om de recursieve top-down methode te gebruiken uit de cursus.
+Voor het mergen van twee skew heaps is gekozen om de recursieve top-down methode te gebruiken uit de cursus.
 De complexiteit hiervan is geamortiseerd $O(\log{}n)$ (bewijs stelling 16 cursus). \\Door het eenvoudige idee heeft dit geen moeilijkheden gegeven bij de implementatie.
 \\\\
 Bij de {\fontfamily{lmss}\selectfont decreaseKey} operatie is gekozen voor het eerste voorstel in de theorievragen uit de opgave.
@@ -197,7 +197,7 @@ De prestaties van het algoritme hangen ook meer af van de implementatie van het 
 
 
 \section{Besluit}
-Alhoewel er duidelijk verschil zit op de prestaties van beide heaps heeft dit maar een minimale invloed op het uitvoeren van het kortste pad algoritme van Dijkstra. Dit kan verklaard worden door de tijdcomplexiteit van Dijkstra's algoritme.\\
+Hoewel er duidelijk verschil zit op de prestaties van beide heaps heeft dit maar een minimale invloed op het uitvoeren van het kortste pad algoritme van Dijkstra. Dit kan verklaard worden door de tijdcomplexiteit van Dijkstra's algoritme.\\
 De heap waarbij ik misschien wel nog een verschil zou verwachten zou de fibonacci heap zijn. Deze heeft theoretisch gezien voor alle bewerkingen buiten het kleinste element verwijderen een tijdcomplexiteit van $O(1)$. Beide heaps die ik heb vergeleken hadden voor toevoeg,verwijder en decreaseKey bewerking een theoretische tijdcomplexiteit van $O(log(n))$.
 \newpage
 
